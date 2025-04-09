@@ -78,7 +78,7 @@ for recommendation in status['recommendations']:
 
 ## Documentation
 
-Full documentation is available at [Read the Docs](https://email-deliverability.readthedocs.io/).
+Full documentation is available at [Read the Docs](https://email-deliverability.readthedocs.io/en/latest/).
 
 ## License
 
