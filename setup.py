@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="email_deliverability",
-    version="0.1.0",
+    version="0.1.1",
     description="Comprehensive email deliverability management tools",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -24,6 +24,7 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Topic :: Communications :: Email",
     ],
     python_requires=">=3.7",
     install_requires=[
@@ -32,13 +33,22 @@ setup(
         "cryptography>=3.2.0",
         "schedule>=1.2.0",
     ],
+    entry_points={
+        'console_scripts': [
+            'email-deliverability=email_deliverability.cli:main',
+        ],
+    },
     extras_require={
         "dev": [
             "pytest",
             "pytest-cov",
             "sphinx",
             "sphinx_rtd_theme",
-            "twine",
+            "twine==6.0.1",
+            "black>=20.8b1",
+            "isort>=5.7.0",
+            "flake8>=3.8.0",
+            "myst-parser>=0.18.0",  # Added for Markdown support in Sphinx
             "wheel",
             "build",
         ],

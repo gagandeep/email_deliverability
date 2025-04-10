@@ -73,12 +73,64 @@ status = manager.check_deliverability_status()
 for recommendation in status['recommendations']:
     print(f"- {recommendation}")
 
+```
 
+## Command Line Interface
+
+The library comes with a full-featured command line interface:
+
+```bash
+# Check domain authentication
+email-deliverability auth --domain example.com
+
+# Check IP reputation
+email-deliverability reputation --ip 192.0.2.1
+
+# Validate email addresses
+email-deliverability validate --email user@example.com
+email-deliverability validate --file emails.txt
+
+# Run a comprehensive deliverability check
+email-deliverability check --domain example.com --ip 192.0.2.1
+
+# Generate an IP warming plan
+email-deliverability warm-ip --ip 192.0.2.1 --days 30 --target 100000
+
+# Update local resource cache
+email-deliverability resources update
+```
+
+For full CLI documentation:
+
+```bash
+email-deliverability --help
 ```
 
 ## Documentation
 
 Full documentation is available at [Read the Docs](https://email-deliverability.readthedocs.io/en/latest/).
+
+## Development
+
+```bash
+# Clone the repository
+git clone https://github.com/innerkore/email-deliverability.git
+cd email-deliverability
+
+# Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install development dependencies
+pip install -e ".[dev]"
+
+# Run tests
+python -m unittest discover tests
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 

@@ -34,7 +34,7 @@ def main():
     
     # Install/upgrade required packages
     print("Installing build dependencies...")
-    run_command("pip install --upgrade pip setuptools wheel twine")
+    run_command("pip install --upgrade pip setuptools wheel twine==6.0.1")
     
     # Build the package
     print("Building package...")

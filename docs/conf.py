@@ -21,6 +21,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinx_rtd_theme',
+    'myst_parser',  # For Markdown support
 ]
 
 # Add mappings for intersphinx
@@ -47,6 +48,15 @@ html_theme_options = {
     'logo_only': False,
 }
 
+# -- Extension configuration -------------------------------------------------
+
+# Support for Markdown files
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.txt': 'markdown',
+    '.md': 'markdown',
+}
+
 # -- Napoleon settings ----------------------------------------------------
 napoleon_google_docstring = True
 napoleon_numpy_docstring = True
@@ -62,3 +72,6 @@ napoleon_use_rtype = True
 napoleon_preprocess_types = False
 napoleon_type_aliases = None
 napoleon_attr_annotations = True
+
+# Last updated timestamp
+html_last_updated_fmt = '%Y-%m-%d %H:%M:%S'

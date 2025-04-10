@@ -5,7 +5,7 @@ set -e  # Exit on error
 rm -rf dist/ build/ *.egg-info
 
 # Install required tools
-pip install --upgrade pip wheel twine build
+pip install --upgrade pip wheel 'twine==6.0.1' build
 
 # Build the package
 python -m build

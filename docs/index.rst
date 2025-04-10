@@ -8,6 +8,7 @@ Welcome to Email Deliverability Library's documentation!
    introduction
    overview
    installation
+   cli
    quickstart
    authentication
    reputation
