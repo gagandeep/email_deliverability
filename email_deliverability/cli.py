@@ -435,7 +435,7 @@ Date: {datetime.utcnow().strftime('%Y-%m-%d')}
         print(f"Current time (UTC): {datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')}")
         print("Author: innerkore")
         print("License: MIT")
-        print("Documentation: https://email-deliverability.readthedocs.io/")
+        print("Documentation: https://email-deliverability.readthedocs.io/en/latest/")
     
     def run(self, args: Optional[List[str]] = None) -> int:
         """Run the CLI with the provided arguments.
