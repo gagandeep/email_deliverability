@@ -226,10 +226,10 @@ Date: {datetime.utcnow().strftime('%Y-%m-%d')}
             summary = {
                 'summary': {
                     'domain': args.domain,
-                    'score': f"{results['overall_score']}/100",
-                    'spf_status': results['spf']['status'],
-                    'dkim_status': results['dkim']['status'],
-                    'dmarc_status': results['dmarc']['status'],
+                    'score': f"{results.get('overall_score', 'N/A')}/100",
+                    'spf_status': results.get('spf', {}).get('status', 'Unknown'),
+                    'dkim_status': results.get('dkim', {}).get('status', 'Unknown'),
+                    'dmarc_status': results.get('dmarc', {}).get('status', 'Unknown'),
                 }
             }
             results = {**summary, **results}
@@ -295,16 +295,22 @@ Date: {datetime.utcnow().strftime('%Y-%m-%d')}
                 sys.exit(1)
         
         # Validate emails
-        results = manager.validate_email_list(emails, check_mx=args.check_mx)
+        # Pass just the emails without the check_mx parameter
+        results = manager.validate_email_list(emails)
+        
+        # If MX check was requested but not supported, add a note
+        if args.check_mx:
+            logger.warning("MX record checking was requested but is not supported by the current version")
+            print("Note: MX record checking was requested but is not supported by the current version")
         
         # Add a summary for text output
         if args.format == 'text':
             summary = {
                 'summary': {
-                    'total_emails': results['analysis']['total_emails'],
-                    'valid_emails': results['analysis']['valid_emails'],
-                    'invalid_emails': results['analysis']['invalid_emails'],
-                    'disposable_domains': results['analysis']['disposable_domains'],
+                    'total_emails': results['analysis'].get('total_emails', len(emails)),
+                    'valid_emails': results['analysis'].get('valid_emails', 0),
+                    'invalid_emails': results['analysis'].get('invalid_emails', 0),
+                    'disposable_domains': results['analysis'].get('disposable_domains', 0),
                 }
             }
             results = {**summary, **results}
@@ -353,11 +359,28 @@ Date: {datetime.utcnow().strftime('%Y-%m-%d')}
         Args:
             args: Parsed command-line arguments
         """
-        manager = DeliverabilityManager(ip=args.ip)
-        plan = manager.generate_ip_warming_plan(
-            days=args.days,
-            target_volume=args.target
+        # Import the IPWarmingScheduler class directly
+        from email_deliverability.ip_warming.scheduler import IPWarmingScheduler
+        
+        # Create a warming plan using the scheduler directly
+        scheduler = IPWarmingScheduler(
+            daily_target=args.target,
+            warmup_days=args.days,
+            start_date=datetime.now()
         )
+        
+        # Generate the schedule
+        schedule = scheduler.generate_schedule()
+        
+        # Format the plan in the expected structure
+        plan = {
+            'ip': args.ip,
+            'daily_target': args.target,
+            'warmup_days': args.days,
+            'start_date': datetime.now().strftime('%Y-%m-%d'),
+            'schedule': schedule,
+            'recommendations': scheduler.get_recommendations()
+        }
         
         if args.format == 'csv':
             # Special handling for CSV format
@@ -365,18 +388,18 @@ Date: {datetime.utcnow().strftime('%Y-%m-%d')}
                 with open(args.output, 'w', newline='') as f:
                     writer = csv.writer(f)
                     writer.writerow(['Day', 'Date', 'Volume', 'Percentage'])
-                    for day in plan['schedule']:
+                    for day in schedule:
                         writer.writerow([
                             day['day'],
                             day['date'],
                             day['volume'],
-                            f"{day['percentage']}%"
+                            f"{day['percent_of_target']}%"
                         ])
                 print(f"IP warming plan saved to {args.output}")
             else:
                 print("Day,Date,Volume,Percentage")
-                for day in plan['schedule']:
-                    print(f"{day['day']},{day['date']},{day['volume']},{day['percentage']}%")
+                for day in schedule:
+                    print(f"{day['day']},{day['date']},{day['volume']},{day['percent_of_target']}%")
         else:
             self._write_output(plan, args.format, args.output)
     
