@@ -10,7 +10,7 @@ A comprehensive library for managing email deliverability, including:
 Provides both individual tools and a unified facade interface.
 """
 
-__version__ = '0.1.0'
+__version__ = '0.1.2'
 
 # Import functions directly to avoid circular imports
 from .resource_manager import update_deliverability_resources, start_resource_updater

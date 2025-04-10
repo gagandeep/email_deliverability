@@ -64,7 +64,7 @@ Examples:
   Generate IP warming plan:
     email-deliverability warm-ip --ip 192.0.2.1 --days 30 --target 100000
     
-Version: 0.1.0
+Version: 0.1.2
 Date: {datetime.utcnow().strftime('%Y-%m-%d')}
 """
         )
